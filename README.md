@@ -6,6 +6,8 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 ### Gradients
 
+Saliency map is the gradients of the input image.
+
 #### Requirements:
  - Classification Model: Any continuously differentiable model.
  - Gradients of the input.
@@ -24,6 +26,8 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 ### Gradients $\times$ Input
 
+Saliency map is the gradients of the input image times the input image.
+
 #### Requirements:
  - Same as Gradients method
 
@@ -34,6 +38,8 @@ This repository demonstrates a suite of class saliency methods implemented using
  - Same as Gradients method
 
 ### Integrated Gradients
+
+Saliency map is extracted by taking the integral of multiple input image gradients at different scales. The scales are extracted by linearly increasing the pixel values for the images).
 
 #### Requirements:
  - Classification Model: Any continuously differentiable model.
@@ -50,6 +56,8 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 ### Deconvolution
 
+A deconvolutional version of the neural network is created. Then the values from a convolutional layer are passed through the deconvolutional network to convert the features to pixel space, which produces the desired saliency map.
+
 #### Requirements:
  - Classification Model: A convolutional neural network.
  - A deconvolutional version of the classification model.
@@ -65,6 +73,8 @@ This repository demonstrates a suite of class saliency methods implemented using
  - Not class discriminative (doesn't localize the category in the image), shown in [Grad-CAM].
 
 ### Guided Backpropagation
+
+The relu layers of the original classification model are replaced with guided relu layers. Guided relu layers zero negative values in both the forward and backward directions. The gradients of the input image from the model with guided relu layers are then used as the saliency map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
@@ -84,6 +94,8 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 ### Class Activation Mapping (CAM)
 
+Global average pooling is applied to a convolutional layer to extract a vector of weights. The weights are then multiplied by the filters of the convolutional layer. The weighted filters are then summed up to get the saliency map.
+
 #### Requirements:
  - Classification Model: A convolutional neural network.
  - Access the values of a convolutional layer in the classification model.
@@ -99,6 +111,8 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 ### Grad-CAM
 
+Uses the same method as CAM, but now the weights are extracted from the gradients of the convolutional layer.
+
 #### Requirements:
  - Classification Model: A convolutional neural network.
  - Access the values and gradients of the final convolutional layer in the classification model.
@@ -113,6 +127,8 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 
 ### Guided Grad-CAM
+
+Calculates the attributions from both Grad-CAM and guided backprop, then multiplies them together to produce the final saliency map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
