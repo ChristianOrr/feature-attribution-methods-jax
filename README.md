@@ -6,7 +6,7 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 ### Gradients
 
-Saliency map is the gradients of the input image.
+The saliency map is the gradients of the input image.
 
 #### Requirements:
  - Classification Model: Any continuously differentiable model.
@@ -26,7 +26,7 @@ Saliency map is the gradients of the input image.
 
 ### Gradients $\times$ Input
 
-Saliency map is the gradients of the input image times the input image.
+The saliency map is the gradients of the input image times the input image.
 
 #### Requirements:
  - Same as Gradients method
@@ -39,7 +39,7 @@ Saliency map is the gradients of the input image times the input image.
 
 ### Integrated Gradients
 
-Saliency map is extracted by taking the integral of multiple input image gradients at different scales. The scales are extracted by linearly increasing the pixel values for the images).
+The saliency map is extracted by taking the integral of multiple input image gradients at different scales. The scales are extracted by linearly increasing the pixel values from the input image.
 
 #### Requirements:
  - Classification Model: Any continuously differentiable model.
@@ -74,7 +74,7 @@ A deconvolutional version of the neural network is created. Then the values from
 
 ### Guided Backpropagation
 
-The relu layers of the original classification model are replaced with guided relu layers. Guided relu layers zero negative values in both the forward and backward directions. The gradients of the input image from the model with guided relu layers are then used as the saliency map.
+The relu layers of the original classification model are replaced with guided relu layers. Guided relu layers work by  zeroing negative values in both the forward and backward directions. The gradients of the input image from the model with guided relu layers are then used as the saliency map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
@@ -94,7 +94,7 @@ The relu layers of the original classification model are replaced with guided re
 
 ### Class Activation Mapping (CAM)
 
-Global average pooling is applied to a convolutional layer to extract a vector of weights. The weights are then multiplied by the filters of the convolutional layer. The weighted filters are then summed up to get the saliency map.
+Global average pooling is applied to a convolutional layer (can be any convolutional layer in the network) to extract a vector of weights. The weights are then multiplied by the filters of the convolutional layer. The weighted filters are then summed up to get the saliency map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
