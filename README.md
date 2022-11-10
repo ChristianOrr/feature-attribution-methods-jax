@@ -6,27 +6,109 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 ### Gradients
 
+#### Requirements:
+ - Classification Model: Any continuously differentiable model.
+ - Gradients of the input.
+
+#### Pros:
+ - Easy to implement.
+ - Simple to understand.
+ - High resolution saliency map.
+ - Fast: Only needs a single backwards pass to calculate gradients.
+ - Works on a wide range of models.
+ - Class discriminative (localizes the category in the image).
+
+#### Cons:
+ - Lots of noise in the saliency map.
+ - Low accuracy.
+ - Violates the sensitivity axiom (gradient can be zero despite of the input changing), shown in [Integrated Gradients].
 
 ### Gradients $\times$ Input
 
+#### Requirements:
+ - Same as Gradients method
+
+#### Pros:
+ - Same as Gradients method, but better accuracy.
+
+#### Cons:
+ - Same as Gradients method
 
 ### Integrated Gradients
 
+#### Requirements:
+ - Classification Model: Any continuously differentiable model.
+ - Integral of the gradients of multiple scaled inputs. 
 
+#### Pros:
+ - High resolution saliency map.
+ - Works on a wide range of models.
+ - Class discriminative (localizes the category in the image).
+
+#### Cons:
+ - Slow: Requires multiple backwards passes of the model.
+ - Complex: Requires more knowledge and code than gradients.
 
 ### Deconvolution
 
+#### Requirements:
+ - Classification Model: A convolutional neural network.
+ - A deconvolutional version of the classification model.
+ - Access the values of a convolutional layer in the classification model.
 
+#### Pros:
+ - High resolution saliency map.
+ - Fast: Need a single pass through the deconvolutional model.
+
+#### Cons:
+ - Need to create a deconvolutional model.
+ - Not class discriminative (doesn't localize the category in the image), shown in [Grad-CAM].
 
 ### Guided Backpropagation
 
+#### Requirements:
+ - Classification Model: A convolutional neural network.
+ - A new relu layer, called guided relu.
+ - Gradients of the inputs with respect to the model with guided relu layers.
 
+#### Pros:
+ - High resolution saliency map.
+ - Fast: Need a single backward pass through the model with guided relu layers.
+
+#### Cons:
+ - Need to create a new type of relu layer.
+ - Guided relu performs poorly during training.
+ - Complex: Implementing guided relu requires an advanced understanding of the frameworks tools.
+ - Not class discriminative (doesn't localize the category in the image), shown in [Grad-CAM].
 
 ### Class Activation Mapping (CAM)
 
+#### Requirements:
+ - Classification Model: A convolutional neural network.
+ - Access the values of a convolutional layer in the classification model.
+
+#### Pros:
+ - Fast: Only need a mean and dot product operation on the convolutional layer.
+ - Simple to understand.
+ - Class discriminative (localizes the category in the image), shown in [Grad-CAM].
+
+#### Cons:
+ - Low resolution saliency map.
+ - Global average pooling performs poorly during training (but there is a way to train without it).
 
 ### Grad-CAM
 
+#### Requirements:
+ - Classification Model: A convolutional neural network.
+ - Access the values and gradients of the final convolutional layer in the classification model.
+
+#### Pros:
+ - Fast: Need to perform a single backwards pass, plus the same CAM operations.
+ - Class discriminative (localizes the category in the image), shown in [Grad-CAM].
+
+#### Cons:
+ - Low resolution saliency map.
+ - Requires more code and complexity than CAM while providing similar accuracy.
 
 
 ## Installation Requirements
