@@ -16,7 +16,6 @@ This repository demonstrates a suite of class saliency methods implemented using
  - High resolution saliency map.
  - Fast: Only needs a single backwards pass to calculate gradients.
  - Works on a wide range of models.
- - Class discriminative (localizes the category in the image).
 
 #### Cons:
  - Lots of noise in the saliency map.
@@ -62,6 +61,7 @@ This repository demonstrates a suite of class saliency methods implemented using
 
 #### Cons:
  - Need to create a deconvolutional model.
+ - Fails to highlight gradients that contribute negatively, as described in [DeepLIFT].
  - Not class discriminative (doesn't localize the category in the image), shown in [Grad-CAM].
 
 ### Guided Backpropagation
@@ -78,6 +78,7 @@ This repository demonstrates a suite of class saliency methods implemented using
 #### Cons:
  - Need to create a new type of relu layer.
  - Guided relu performs poorly during training.
+ - Fails to highlight gradients that contribute negatively, as described in [DeepLIFT].
  - Complex: Implementing guided relu requires an advanced understanding of the frameworks tools.
  - Not class discriminative (doesn't localize the category in the image), shown in [Grad-CAM].
 
@@ -111,6 +112,21 @@ This repository demonstrates a suite of class saliency methods implemented using
  - Requires more code and complexity than CAM while providing similar accuracy.
 
 
+### Guided Grad-CAM
+
+#### Requirements:
+ - Classification Model: A convolutional neural network.
+ - All the requirements from Grad-CAM and Guided backprop.
+
+#### Pros:
+ - Fast: Only a single backwards pass is needed.
+ - Class discriminative (localizes the category in the image), shown in [Grad-CAM].
+ - High resolution saliency map.
+
+#### Cons:
+ - Complex: Need to implement both Grad-CAM and guided backprop.
+
+
 ## Installation Requirements
 
 Jax is a requirement for the notebooks, you can install GPU accelerated Jax by running the command below.
@@ -136,5 +152,5 @@ pip install matplotlib
  - [Guided Backprop] - [Striving for Simplicity: The All Convolutional Net](https://arxiv.org/abs/1412.6806)
  - [CAM] - [Learning Deep Features for Discriminative Localization](https://arxiv.org/abs/1512.04150)
  - [Grad-CAM] - [Grad-CAM: Visual Explanations from Deep Networks via Gradient-based Localization](https://arxiv.org/abs/1610.02391)
-
+ - [DeepLIFT] - [Learning Important Features Through Propagating Activation Differences](https://arxiv.org/abs/1704.02685)
 
