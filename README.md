@@ -1,12 +1,12 @@
-# Jax Saliency Methods
+# Jax Feature Attribution Methods
 
-This repository demonstrates a suite of class saliency methods implemented using Jax and Flax. The primary focus is on how the algorithms work and how to implement them using the tools provided by Jax and Flax. MNIST was chosen as the dataset for the demonstrations because it doesn't require training complex models to perform well on the dataset. This allows us to use  simple perceptron or convolutional classification models and direct most of the focus on the saliency algorithms. In order to provide a better understanding of the algorithms values compared to other algorithms, brief descriptions of the algorithms features and drawbacks are provided in the section below. If you would like to understand the algorithms in more detail, the original papers are provided in the references section at the bottom.   
+This repository demonstrates a suite of feature attribution methods implemented using Jax and Flax. The primary focus is on how the algorithms work and how to implement them using the tools provided by Jax and Flax. MNIST was chosen as the dataset for the demonstrations because it doesn't require training complex models to perform well on the dataset. This allows us to use  simple perceptron or convolutional classification models and direct most of the focus on the feature attribution algorithms. In order to provide a better understanding of the algorithms values compared to other algorithms, brief descriptions of the algorithms features and drawbacks are provided in the section below. If you would like to understand the algorithms in more detail, the original papers are provided in the references section at the bottom.   
 
 ## Algorithms Summary
 
 ### Gradients
 
-The saliency map is the gradients of the input image.
+The attribution map is the gradients of the input image.
 
 #### Requirements:
  - Classification Model: Any continuously differentiable model.
@@ -15,18 +15,18 @@ The saliency map is the gradients of the input image.
 #### Pros:
  - Easy to implement.
  - Simple to understand.
- - High resolution saliency map.
+ - High resolution attribution map.
  - Fast: Only needs a single backwards pass to calculate gradients.
  - Works on a wide range of models.
 
 #### Cons:
- - Lots of noise in the saliency map.
+ - Lots of noise in the attribution map.
  - Low accuracy.
  - Violates the sensitivity axiom (gradient can be zero despite of the input changing), shown in [Integrated Gradients].
 
 ### Gradients $\times$ Input
 
-The saliency map is the gradients of the input image times the input image.
+The attribution map is the gradients of the input image times the input image.
 
 #### Requirements:
  - Same as Gradients method
@@ -39,14 +39,14 @@ The saliency map is the gradients of the input image times the input image.
 
 ### Integrated Gradients
 
-The saliency map is extracted by taking the integral of multiple input image gradients at different scales. The scales are extracted by linearly increasing the pixel values from the input image.
+The attribution map is extracted by taking the integral of multiple input image gradients at different scales. The scales are extracted by linearly increasing the pixel values from the input image.
 
 #### Requirements:
  - Classification Model: Any continuously differentiable model.
  - Integral of the gradients of multiple scaled inputs. 
 
 #### Pros:
- - High resolution saliency map.
+ - High resolution attribution map.
  - Works on a wide range of models.
  - Class discriminative (localizes the category in the image).
 
@@ -56,7 +56,7 @@ The saliency map is extracted by taking the integral of multiple input image gra
 
 ### Deconvolution
 
-A deconvolutional version of the neural network is created. Then the values from a convolutional layer are passed through the deconvolutional network to convert the features to pixel space, which produces the desired saliency map.
+A deconvolutional version of the neural network is created. Then the values from a convolutional layer are passed through the deconvolutional network to convert the features to pixel space, which produces the desired attribution map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
@@ -64,7 +64,7 @@ A deconvolutional version of the neural network is created. Then the values from
  - Access the values of a convolutional layer in the classification model.
 
 #### Pros:
- - High resolution saliency map.
+ - High resolution attribution map.
  - Fast: Need a single pass through the deconvolutional model.
 
 #### Cons:
@@ -74,7 +74,7 @@ A deconvolutional version of the neural network is created. Then the values from
 
 ### Guided Backpropagation
 
-The relu layers of the original classification model are replaced with guided relu layers. Guided relu layers work by  zeroing negative values in both the forward and backward directions. The gradients of the input image from the model with guided relu layers are then used as the saliency map.
+The relu layers of the original classification model are replaced with guided relu layers. Guided relu layers work by  zeroing negative values in both the forward and backward directions. The gradients of the input image from the model with guided relu layers are then used as the attribution map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
@@ -82,7 +82,7 @@ The relu layers of the original classification model are replaced with guided re
  - Gradients of the inputs with respect to the model with guided relu layers.
 
 #### Pros:
- - High resolution saliency map.
+ - High resolution attribution map.
  - Fast: Need a single backward pass through the model with guided relu layers.
 
 #### Cons:
@@ -94,7 +94,7 @@ The relu layers of the original classification model are replaced with guided re
 
 ### Class Activation Mapping (CAM)
 
-Global average pooling is applied to a convolutional layer (can be any convolutional layer in the network) to extract a vector of weights. The weights are then multiplied by the filters of the convolutional layer. The weighted filters are then summed up to get the saliency map.
+Global average pooling is applied to a convolutional layer (can be any convolutional layer in the network) to extract a vector of weights. The weights are then multiplied by the filters of the convolutional layer. The weighted filters are then summed up to get the attribution map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
@@ -106,7 +106,7 @@ Global average pooling is applied to a convolutional layer (can be any convoluti
  - Class discriminative (localizes the category in the image), shown in [Grad-CAM].
 
 #### Cons:
- - Low resolution saliency map.
+ - Low resolution attribution map.
  - Global average pooling performs poorly during training (but there is a way to train without it).
 
 ### Grad-CAM
@@ -122,13 +122,13 @@ Uses the same method as CAM, but now the weights are extracted from the gradient
  - Class discriminative (localizes the category in the image), shown in [Grad-CAM].
 
 #### Cons:
- - Low resolution saliency map.
+ - Low resolution attribution map.
  - Requires more code and complexity than CAM while providing similar accuracy.
 
 
 ### Guided Grad-CAM
 
-Calculates the attributions from both Grad-CAM and guided backprop, then multiplies them together to produce the final saliency map.
+Calculates the attributions from both Grad-CAM and guided backprop, then multiplies them together to produce the final attribution map.
 
 #### Requirements:
  - Classification Model: A convolutional neural network.
@@ -137,7 +137,7 @@ Calculates the attributions from both Grad-CAM and guided backprop, then multipl
 #### Pros:
  - Fast: Only a single backwards pass is needed.
  - Class discriminative (localizes the category in the image), shown in [Grad-CAM].
- - High resolution saliency map.
+ - High resolution attribution map.
 
 #### Cons:
  - Complex: Need to implement both Grad-CAM and guided backprop.
