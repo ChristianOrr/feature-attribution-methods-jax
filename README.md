@@ -177,6 +177,8 @@ pip install flax
 pip install jupyter
 pip install pandas
 pip install matplotlib
+pip install requests
+pip install urllib3
 ```
 
 
