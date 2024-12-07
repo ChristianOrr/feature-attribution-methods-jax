@@ -4,7 +4,8 @@ This repository demonstrates a suite of feature attribution methods implemented 
 
 ## Algorithms Summary
 
-### Gradients
+<details>
+<summary>Gradients</summary>
 
 The attribution map is the gradients of the input image.
 
@@ -23,8 +24,10 @@ The attribution map is the gradients of the input image.
  - Lots of noise in the attribution map.
  - Low accuracy.
  - Violates the sensitivity axiom (gradient can be zero despite of the input changing), shown in [Integrated Gradients].
+</details>
 
-### Gradients $\times$ Input
+<details>
+<summary>Gradients X Input</summary>
 
 The attribution map is the gradients of the input image times the input image.
 
@@ -36,8 +39,10 @@ The attribution map is the gradients of the input image times the input image.
 
 #### Cons:
  - Same as Gradients method
+</details>
 
-### Integrated Gradients
+<details>
+<summary>Integrated Gradients</summary>
 
 The attribution map is extracted by taking the integral of multiple input image gradients at different scales. The scales are extracted by linearly increasing the pixel values from the input image.
 
@@ -53,8 +58,10 @@ The attribution map is extracted by taking the integral of multiple input image 
 #### Cons:
  - Slow: Requires multiple backwards passes of the model.
  - Complex: Requires more knowledge and code than gradients.
+</details>
 
-### Deconvolution
+<details>
+<summary>Deconvolution</summary>
 
 A deconvolutional version of the neural network is created. Then the values from a convolutional layer are passed through the deconvolutional network to convert the features to pixel space, which produces the desired attribution map.
 
@@ -71,8 +78,10 @@ A deconvolutional version of the neural network is created. Then the values from
  - Need to create a deconvolutional model.
  - Fails to highlight gradients that contribute negatively, as described in [DeepLIFT].
  - Not class discriminative (doesn't localize the category in the image), shown in [Grad-CAM].
+</details>
 
-### Guided Backpropagation
+<details>
+<summary>Guided Backpropagation</summary>
 
 The relu layers of the original classification model are replaced with guided relu layers. Guided relu layers work by  zeroing negative values in both the forward and backward directions. The gradients of the input image from the model with guided relu layers are then used as the attribution map.
 
@@ -91,8 +100,10 @@ The relu layers of the original classification model are replaced with guided re
  - Fails to highlight gradients that contribute negatively, as described in [DeepLIFT].
  - Complex: Implementing guided relu requires an advanced understanding of the frameworks tools.
  - Not class discriminative (doesn't localize the category in the image), shown in [Grad-CAM].
+</details>
 
-### Class Activation Mapping (CAM)
+<details>
+<summary>Class Activation Mapping (CAM)</summary>
 
 Global average pooling is applied to a convolutional layer (can be any convolutional layer in the network) to extract a vector of weights. The weights are then multiplied by the filters of the convolutional layer. The weighted filters are then summed up to get the attribution map.
 
@@ -108,8 +119,10 @@ Global average pooling is applied to a convolutional layer (can be any convoluti
 #### Cons:
  - Low resolution attribution map.
  - Global average pooling performs poorly during training (but there is a way to train without it).
+</details>
 
-### Grad-CAM
+<details>
+<summary>Grad-CAM</summary>
 
 Uses the same method as CAM, but now the weights are extracted from the gradients of the convolutional layer.
 
@@ -124,9 +137,10 @@ Uses the same method as CAM, but now the weights are extracted from the gradient
 #### Cons:
  - Low resolution attribution map.
  - Requires more code and complexity than CAM while providing similar accuracy.
+</details>
 
-
-### Guided Grad-CAM
+<details>
+<summary>Guided Grad-CAM</summary>
 
 Calculates the attributions from both Grad-CAM and guided backprop, then multiplies them together to produce the final attribution map.
 
@@ -141,20 +155,17 @@ Calculates the attributions from both Grad-CAM and guided backprop, then multipl
 
 #### Cons:
  - Complex: Need to implement both Grad-CAM and guided backprop.
-
+</details>
 
 ## Installation Requirements
 
 Jax is a requirement for the notebooks, you can install GPU accelerated Jax by running the command below.
 ```
-pip install --upgrade "jax[cuda]" -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
-``` 
-The latest Flax can be installed with the following command.
-```
-pip install -q clu ml-collections git+https://github.com/google/flax
+pip install -U "jax[cuda12]"
 ``` 
 The following packages are also required.
 ```
+pip install flax
 pip install jupyter
 pip install pandas
 pip install matplotlib
